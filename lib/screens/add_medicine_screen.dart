@@ -11,7 +11,7 @@ class AddMedicineScreen extends StatefulWidget {
 class _AddMedicineScreenState extends State<AddMedicineScreen> {
   final _nameController = TextEditingController();
   TimeOfDay _selectedTime = TimeOfDay.now();
-  List<bool> _selectedDays = List.filled(7, true); // 월~일
+  final List<bool> _selectedDays = List.filled(7, true); // 월~일
 
   Future<void> _selectTime() async {
     final TimeOfDay? picked = await showTimePicker(

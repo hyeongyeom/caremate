@@ -167,8 +167,9 @@ class _VoiceAddMedicineScreenState extends State<VoiceAddMedicineScreen> {
       // "아침 8시", "저녁 6시", "8시", "오후 3시" 등 처리
       int hour = 8; // 기본값
 
-      if (text.contains('1시') || text.contains('한시')) hour = 1;
-      else if (text.contains('2시') || text.contains('두시')) hour = 2;
+      if (text.contains('1시') || text.contains('한시')) {
+        hour = 1;
+      } else if (text.contains('2시') || text.contains('두시')) hour = 2;
       else if (text.contains('3시') || text.contains('세시')) hour = 3;
       else if (text.contains('4시') || text.contains('네시')) hour = 4;
       else if (text.contains('5시') || text.contains('다섯')) hour = 5;

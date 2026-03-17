@@ -2,7 +2,6 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:speech_to_text/speech_to_text.dart';
 import 'package:permission_handler/permission_handler.dart';
-import 'package:google_generative_ai/google_generative_ai.dart';
 import 'screens/add_medicine_screen.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'dart:convert';
@@ -11,32 +10,39 @@ import 'package:http/http.dart' as http;
 const String serverUrl = 'https://ornamented-jeramy-achromatically.ngrok-free.app';
 const String userId = 'user_001';
 
-void main() => runApp(MaterialApp(  // ⭐ const 제거!
+void main() => runApp(MaterialApp(  //
   home: const PlantCareApp(),
   debugShowCheckedModeBanner: false,
 
-  // ⭐ 전역 테마 설정
+  // 전역 테마 설정
   theme: ThemeData(
     textTheme: const TextTheme(
       displayLarge: TextStyle(fontSize: 36, fontWeight: FontWeight.bold),
       displayMedium: TextStyle(fontSize: 32, fontWeight: FontWeight.bold),
       displaySmall: TextStyle(fontSize: 28, fontWeight: FontWeight.bold),
-      headlineMedium: TextStyle(fontSize: 24, fontWeight: FontWeight.bold),
-      headlineSmall: TextStyle(fontSize: 22, fontWeight: FontWeight.bold),
-      titleLarge: TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
-      bodyLarge: TextStyle(fontSize: 18),
-      bodyMedium: TextStyle(fontSize: 16),
-      labelLarge: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
+      headlineMedium: TextStyle(fontSize: 28, fontWeight: FontWeight.bold),
+      headlineSmall: TextStyle(fontSize: 26, fontWeight: FontWeight.bold),
+      titleLarge: TextStyle(fontSize: 24, fontWeight: FontWeight.bold),
+      bodyLarge: TextStyle(fontSize: 22),
+      bodyMedium: TextStyle(fontSize: 20),
+      labelLarge: TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
     ),
     elevatedButtonTheme: ElevatedButtonThemeData(
       style: ElevatedButton.styleFrom(
-        textStyle: const TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
-        padding: const EdgeInsets.symmetric(vertical: 18, horizontal: 24),
+        minimumSize: const Size(0, 60),
+        textStyle: const TextStyle(fontSize: 24, fontWeight: FontWeight.bold),
+        padding: const EdgeInsets.symmetric(horizontal: 24),
+      ),
+    ),
+    textButtonTheme: TextButtonThemeData(
+      style: TextButton.styleFrom(
+        minimumSize: const Size(64, 60),
+        textStyle: const TextStyle(fontSize:20, fontWeight: FontWeight.bold),
       ),
     ),
     appBarTheme: const AppBarTheme(
       titleTextStyle: TextStyle(
-        fontSize: 22,
+        fontSize: 26,
         fontWeight: FontWeight.bold,
         color: Colors.white,
       ),
@@ -95,7 +101,7 @@ class GlobalMedicineList {
 }
 
 class MedicationManager extends ChangeNotifier {
-  List<Medicine> _medicines = [];
+  final List<Medicine> _medicines = [];
 
   List<Medicine> get medicines => _medicines;
 
@@ -158,6 +164,10 @@ class _PlantCareAppState extends State<PlantCareApp> {
           });
         },
         selectedItemColor: Colors.green,
+        iconSize: 36,
+        selectedFontSize: 20,
+        unselectedFontSize: 18,
+        type: BottomNavigationBarType.fixed,
         items: const [
           BottomNavigationBarItem(
             icon: Icon(Icons.eco),
@@ -197,8 +207,6 @@ class _HomeScreenState extends State<HomeScreen> {
     await GlobalMedicineList.load();
     if (mounted) {
       setState(() {
-        // 이 setState가 호출되어야 build 함수 안에서
-        // GlobalMedicineList.plantLevel 등의 최신값을 읽어옵니다.
       });
     }
   }
@@ -237,14 +245,14 @@ class _HomeScreenState extends State<HomeScreen> {
               ),
               child: Column(
                 children: [
-                  const Text('🌱 나의 건강나무'),
+                  const Text('🌱 나의 건강나무', style: TextStyle(fontSize: 24, fontWeight: FontWeight.bold)),
                   const SizedBox(height: 20),
                   Text(
                     _getPlantEmoji(plantLevel),
                     style: const TextStyle(fontSize: 120),
                   ),
                   const SizedBox(height: 10),
-                  Text('레벨 $plantLevel'),
+                  Text('레벨 $plantLevel', style: const TextStyle(fontSize: 24, fontWeight: FontWeight.bold)),
                   const SizedBox(height: 20),
                   LinearProgressIndicator(
                     value: (totalMedicine % 10) / 10,
@@ -280,9 +288,9 @@ class _HomeScreenState extends State<HomeScreen> {
                   children: [
                     Row(
                       children: [
-                        Icon(Icons.medication, color: Colors.green.shade700),
+                        Icon(Icons.medication, color: Colors.green.shade700, size: 28),
                         const SizedBox(width: 10),
-                        const Text('등록된 약'),
+                        const Text('등록된 약', style: TextStyle(fontSize: 24, fontWeight: FontWeight.bold)),
                       ],
                     ),
                     const SizedBox(height: 15),
@@ -301,7 +309,7 @@ class _HomeScreenState extends State<HomeScreen> {
                             child: Column(
                               crossAxisAlignment: CrossAxisAlignment.start,
                               children: [
-                                Text(med.name),
+                                Text(med.name, style: const TextStyle(fontSize: 24, fontWeight: FontWeight.bold)),
                                 const SizedBox(height: 4),
                                 Text(
                                   '${med.alarmTime.hour.toString().padLeft(2, '0')}:${med.alarmTime.minute.toString().padLeft(2, '0')}',
@@ -310,6 +318,9 @@ class _HomeScreenState extends State<HomeScreen> {
                             ),
                           ),
                           IconButton(
+                            constraints: const BoxConstraints(midWidth: 60, minHeight: 60),
+                            padding: EdgeInsets.zero,
+                            iconSize: 36,
                             icon: const Icon(Icons.delete, color: Colors.red),
                             onPressed: () async {
                               setState(() {
@@ -321,7 +332,7 @@ class _HomeScreenState extends State<HomeScreen> {
                           ),
                         ],
                       ),
-                    )).toList(),
+                    )),
                   ],
                 ),
               ),
@@ -348,9 +359,9 @@ class _HomeScreenState extends State<HomeScreen> {
                 children: [
                   Row(
                     children: [
-                      Icon(Icons.calendar_today, color: Colors.green.shade700),
+                      Icon(Icons.calendar_today, color: Colors.green.shade700, size: 28),
                       const SizedBox(width: 10),
-                      const Text('오늘의 복약 현황'),
+                      const Text('오늘의 복약 현황', style: TextStyle(fontSize: 24, fontWeight: FontWeight.bold)),
                     ],
                   ),
                   const SizedBox(height: 20),
@@ -481,18 +492,18 @@ class _HomeScreenState extends State<HomeScreen> {
       ),
       child: Column(
         children: [
-          Icon(icon, color: color, size: 30),
+          Icon(icon, color: color, size: 36),
           const SizedBox(height: 8),
-          Text(value),
+          Text(value, style: const TextStyle(fontSize: 24, fontWeight: FontWeight.bold)),
           const SizedBox(height: 4),
-          Text(title),
+          Text(title, style: const TextStyle(fontSize: 20)),
         ],
       ),
     );
   }
 
   void _showMedicineDialog(BuildContext context) {
-    // ⭐ 단일 String 대신 선택된 약 이름들을 담을 '리스트'를 선언합니다.
+    // 단일 String 대신 선택된 약 이름들을 담을 '리스트'를 선언합니다.
     List<String> selectedMedicineNames = [];
 
     showDialog(
@@ -501,23 +512,24 @@ class _HomeScreenState extends State<HomeScreen> {
         return StatefulBuilder(
           builder: (context, setDialogState) {
             return AlertDialog(
-              title: const Text('어떤 약을 드셨나요? (중복 선택 가능)'),
+              title: const Text('어떤 약을 드셨나요? (중복 선택 가능)', style: TextStyle(fontSize: 24, fontWeight: FontWeight.bold)),
               content: Column(
                 mainAxisSize: MainAxisSize.min,
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
                   if (GlobalMedicineList.medicines.isEmpty)
-                    const Text('등록된 약이 없습니다.\n먼저 약을 등록해주세요.')
+                    const Text('등록된 약이 없습니다.\n먼저 약을 등록해주세요.', style: TextStyle(fontSize: 20))
                   else
                     Wrap(
                       spacing: 8,
                       runSpacing: 8,
                       children: GlobalMedicineList.medicines.map((med) {
-                        // ⭐ 현재 약이 선택된 리스트에 포함되어 있는지 확인
+                        // 현재 약이 선택된 리스트에 포함되어 있는지 확인
                         final isSelected = selectedMedicineNames.contains(med.name);
 
-                        return FilterChip( // ChoiceChip 대신 다중 선택에 적합한 FilterChip 사용
-                          label: Text(med.name),
+                        return FilterChip(
+                          label: Text(med.name, style: const TextStyle(fontSize: 22)),
+                          labelPadding: const EdgeInsets.symmetric(horizontal: 16, vertical: 16),
                           selected: isSelected,
                           selectedColor: Colors.green.shade200,
                           checkmarkColor: Colors.green.shade900,
@@ -540,10 +552,10 @@ class _HomeScreenState extends State<HomeScreen> {
               actions: [
                 TextButton(
                   onPressed: () => Navigator.pop(context),
-                  child: const Text('취소'),
+                  child: const Text('취소', style: TextStyle(fontSize: 20)),
                 ),
                 ElevatedButton(
-                  // ⭐ 하나라도 선택되어야 버튼 활성화
+                  // 하나라도 선택되어야 버튼 활성화
                   onPressed: selectedMedicineNames.isEmpty
                       ? null
                       : () async {
@@ -573,7 +585,7 @@ class _HomeScreenState extends State<HomeScreen> {
                     backgroundColor: Colors.green,
                     disabledBackgroundColor: Colors.grey.shade300,
                   ),
-                  child: Text('${selectedMedicineNames.length}개 기록하기'),
+                  child: Text('${selectedMedicineNames.length}개 기록하기', style: const TextStyle(fontSize: 20)),
                 ),
               ],
             );
@@ -593,9 +605,9 @@ class _HomeScreenState extends State<HomeScreen> {
           children: [
             const Text('🎉', style: TextStyle(fontSize: 60)),
             const SizedBox(height: 20),
-            const Text('식물이 쑥쑥 자라고 있어요!'),
+            const Text('식물이 쑥쑥 자라고 있어요!', style: TextStyle(fontSize: 24, fontWeight: FontWeight.bold)),
             const SizedBox(height: 10),
-            const Text('건강 관리 잘하고 계세요!'),
+            const Text('건강 관리 잘하고 계세요!', style: TextStyle(fontSize: 20)),
           ],
         ),
         actions: [
@@ -621,7 +633,7 @@ class _ChatScreenState extends State<ChatScreen> with SingleTickerProviderStateM
   final SpeechToText _speechToText = SpeechToText();
   bool _speechEnabled = false;
   String _wordsSpoken = "마이크 버튼을 눌러 말씀해주세요";
-  List<ChatMessage> _messages = [];
+  final List<ChatMessage> _messages = [];
   bool _isRecording = false;
   bool _isLoading = false; // ⭐ AI 답변 대기 중
   late AnimationController _animationController;
@@ -649,7 +661,9 @@ class _ChatScreenState extends State<ChatScreen> with SingleTickerProviderStateM
         onError: (error) => print('음성 인식 오류: $error'),
         onStatus: (status) => print('음성 인식 상태: $status'),
       );
-      setState(() {});
+      if (mounted) {
+       setState(() {});
+      }
     }
   }
 
@@ -662,13 +676,17 @@ class _ChatScreenState extends State<ChatScreen> with SingleTickerProviderStateM
     if (_isRecording) {
       HapticFeedback.lightImpact();
       await _speechToText.stop();
-      setState(() {
+      if (mounted)
+      {
+        setState(() {
         _isRecording = false;
-      });
+       });
+      }
+      
 
       if (_wordsSpoken.isNotEmpty &&
           _wordsSpoken != "마이크 버튼을 눌러 말씀해주세요") {
-        await _sendMessage(_wordsSpoken); // ⭐ await 추가!
+        await _sendMessage(_wordsSpoken);
       }
     } else {
       HapticFeedback.heavyImpact();
@@ -679,9 +697,11 @@ class _ChatScreenState extends State<ChatScreen> with SingleTickerProviderStateM
 
       await _speechToText.listen(
         onResult: (result) {
+          if (mounted) {
           setState(() {
             _wordsSpoken = result.recognizedWords;
-          });
+           });
+          }
         },
         localeId: "ko_KR",
         listenMode: ListenMode.confirmation,
@@ -689,7 +709,6 @@ class _ChatScreenState extends State<ChatScreen> with SingleTickerProviderStateM
     }
   }
 
-  // ⭐⭐⭐ 핵심: 서버 호출로 변경! ⭐⭐⭐
   Future<void> _sendMessage(String text) async {
     setState(() {
       _messages.add(ChatMessage(
@@ -711,6 +730,8 @@ class _ChatScreenState extends State<ChatScreen> with SingleTickerProviderStateM
         }),
       ).timeout(const Duration(seconds: 30));
 
+      if(!mounted) return;
+
       if (response.statusCode == 200) {
         final data = jsonDecode(utf8.decode(response.bodyBytes));
         setState(() {
@@ -725,13 +746,18 @@ class _ChatScreenState extends State<ChatScreen> with SingleTickerProviderStateM
       }
     } catch (e) {
       print('서버 에러: $e');
+      if (mounted) _addErrorMessage();
       _addErrorMessage();
     } finally {
-      setState(() => _isLoading = false);
+      if(mounted) {
+        setState(() => _isLoading = false);
+      }
     }
   }
 
   void _addErrorMessage() {
+    if (!mounted) return;
+    
     setState(() {
       _messages.add(ChatMessage(
         text: '새싹이가 잠시 자리를 비웠어요. 서버가 켜져 있는지 확인해주세요 🌱',
@@ -821,13 +847,15 @@ class _ChatScreenState extends State<ChatScreen> with SingleTickerProviderStateM
                             Text(
                               _isRecording
                                   ? "🎤 듣고 있어요..."
-                                  : (_isLoading ? "새싹이가 생각 중..." : "준비 완료"), // ⭐ 로딩 상태 표시
+                                  : (_isLoading ? "새싹이가 생각 중..." : "준비 완료"), // 로딩 상태 표시
+                                  style: const TextStyle(fontSize: 24, fontWeight: FontWeight.bold),
                             ),
                             const SizedBox(height: 4),
                             Text(
                               _wordsSpoken.isEmpty
                                   ? "마이크 버튼을 눌러 말씀해주세요"
                                   : _wordsSpoken,
+                                  style: const TextStyle(fontSize:20 ),
                               maxLines: 2,
                               overflow: TextOverflow.ellipsis,
                             ),
@@ -841,7 +869,7 @@ class _ChatScreenState extends State<ChatScreen> with SingleTickerProviderStateM
                 const SizedBox(height: 24),
 
                 InkWell(
-                  onTap: _isLoading ? null : _toggleRecording, // ⭐ 로딩 중엔 비활성화
+                  onTap: _isLoading ? null : _toggleRecording, // 로딩 중엔 비활성화
                   borderRadius: BorderRadius.circular(50),
                   child: AnimatedContainer(
                     duration: const Duration(milliseconds: 300),
@@ -851,7 +879,7 @@ class _ChatScreenState extends State<ChatScreen> with SingleTickerProviderStateM
                       shape: BoxShape.circle,
                       gradient: LinearGradient(
                         colors: _isLoading
-                            ? [Colors.grey.shade400, Colors.grey.shade600] // ⭐ 로딩 중 회색
+                            ? [Colors.grey.shade400, Colors.grey.shade600] // 로딩 중 회색
                             : _isRecording
                             ? [Colors.red.shade400, Colors.red.shade700]
                             : [Colors.green.shade400, Colors.green.shade700],
@@ -870,7 +898,7 @@ class _ChatScreenState extends State<ChatScreen> with SingleTickerProviderStateM
                     ),
                     child: Icon(
                       _isLoading
-                          ? Icons.hourglass_empty // ⭐ 로딩 아이콘
+                          ? Icons.hourglass_empty // 로딩 아이콘
                           : (_isRecording ? Icons.stop : Icons.mic),
                       color: Colors.white,
                       size: 50,
@@ -895,6 +923,7 @@ class _ChatScreenState extends State<ChatScreen> with SingleTickerProviderStateM
                         ? '🛑 버튼을 다시 눌러 녹음 종료'
                         : '🎤 버튼을 눌러 녹음 시작'),
                     textAlign: TextAlign.center,
+                    style: const TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
                   ),
                 ),
               ],
@@ -928,6 +957,7 @@ class _ChatScreenState extends State<ChatScreen> with SingleTickerProviderStateM
         child: Text(
           message.text,
           style: TextStyle(
+            fontSize: 20,
             color: message.isUser ? Colors.white : Colors.black87,
           ),
         ),
@@ -935,7 +965,7 @@ class _ChatScreenState extends State<ChatScreen> with SingleTickerProviderStateM
     );
   }
 
-  // ⭐ 로딩 버블 추가
+  // 로딩 버블 추가
   Widget _buildLoadingBubble() {
     return Align(
       alignment: Alignment.centerLeft,
@@ -955,7 +985,7 @@ class _ChatScreenState extends State<ChatScreen> with SingleTickerProviderStateM
         ),
         child: const Text(
           '새싹이가 생각 중... 🌱',
-          style: TextStyle(fontSize: 16, color: Colors.grey),
+          style: TextStyle(fontSize: 20, color: Colors.grey),
         ),
       ),
     );
@@ -1002,7 +1032,7 @@ class _HistoryScreenState extends State<HistoryScreen> {
         backgroundColor: Colors.green,
       ),
       body: historyData.isEmpty
-          ? const Center(child: Text("아직 복약 기록이 없어요. 🌱"))
+          ? const Center(child: Text("아직 복약 기록이 없어요. 🌱", style: TextStyle(fontSize: 24)))
           : ListView.builder(
         padding: const EdgeInsets.all(16),
         itemCount: historyData.length,
@@ -1034,8 +1064,8 @@ class _HistoryScreenState extends State<HistoryScreen> {
                   child: Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
-                      Text(name, style: const TextStyle(fontWeight: FontWeight.bold, fontSize: 18)),
-                      const SizedBox(height: 4),
+                      Text(name, style: const TextStyle(fontWeight: FontWeight.bold, fontSize: 24)),
+                      const SizedBox(height:6),
                       Text('${date.year}년 ${date.month}월 ${date.day}일 ${date.hour}:${date.minute.toString().padLeft(2, '0')}'),
                     ],
                   ),

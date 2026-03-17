@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
-import '../main.dart';
 
 class AlarmScreen extends StatefulWidget {
   final String medicineName;

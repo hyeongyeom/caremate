@@ -9,7 +9,7 @@ android {
     namespace = "com.example.flower_app"
     compileSdk = flutter.compileSdkVersion
     ndkVersion = flutter.ndkVersion
-    compileSdkVersion 34
+    compileSdk = 36
 
     compileOptions {
         isCoreLibraryDesugaringEnabled = true
@@ -47,6 +47,5 @@ flutter {
 }
 
 dependencies {
-    // ⭐ Kotlin 스타일
-    coreLibraryDesugaring("com.android.tools:desugar_jdk_libs:2.0.4"
+    coreLibraryDesugaring("com.android.tools:desugar_jdk_libs:2.0.4")
 }
