@@ -326,7 +326,7 @@ class _VoiceAddMedicineScreenState extends State<VoiceAddMedicineScreen> {
                       child: Text(
                         '당신: $_spokenText',
                         style: const TextStyle(
-                          fontSize: 18,
+                          fontSize: 20,
                           fontWeight: FontWeight.bold,
                         ),
                       ),
@@ -370,7 +370,7 @@ class _VoiceAddMedicineScreenState extends State<VoiceAddMedicineScreen> {
                     Text(
                       _isListening ? '듣고 있습니다...' : '눌러서 말하기',
                       style: const TextStyle(
-                        fontSize: 18,
+                        fontSize: 20,
                         fontWeight: FontWeight.bold,
                         color: Colors.green,
                       ),

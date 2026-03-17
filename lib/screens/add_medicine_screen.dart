@@ -58,22 +58,25 @@ class _AddMedicineScreenState extends State<AddMedicineScreen> {
             const Text(
               '💊 약 이름',
               style: TextStyle(
-                fontSize: 18,
+                fontSize: 24,
                 fontWeight: FontWeight.bold,
               ),
             ),
             const SizedBox(height: 10),
             TextField(
               controller: _nameController,
+              style: const TextStyle(fontSize: 20),
               decoration: InputDecoration(
                 hintText: '예) 혈압약, 비타민',
+                hintStyle: const TextStyle(fontSize: 20),
+                contentPadding: const EdgeInsets.symmetric(vertical:20, horizontal:16),
                 filled: true,
                 fillColor: Colors.white,
                 border: OutlineInputBorder(
                   borderRadius: BorderRadius.circular(15),
                   borderSide: BorderSide.none,
                 ),
-                prefixIcon: const Icon(Icons.medication, color: Colors.green),
+                prefixIcon: const Icon(Icons.medication, color: Colors.green, size:28),
               ),
             ),
 
@@ -83,7 +86,7 @@ class _AddMedicineScreenState extends State<AddMedicineScreen> {
             const Text(
               '⏰ 복용 시간',
               style: TextStyle(
-                fontSize: 18,
+                fontSize: 22,
                 fontWeight: FontWeight.bold,
               ),
             ),
@@ -109,12 +112,12 @@ class _AddMedicineScreenState extends State<AddMedicineScreen> {
                     Text(
                       '${_selectedTime.hour.toString().padLeft(2, '0')}:${_selectedTime.minute.toString().padLeft(2, '0')}',
                       style: const TextStyle(
-                        fontSize: 24,
+                        fontSize: 28,
                         fontWeight: FontWeight.bold,
                         color: Colors.green,
                       ),
                     ),
-                    const Icon(Icons.access_time, color: Colors.green),
+                    const Icon(Icons.access_time, color: Colors.green, size:36),
                   ],
                 ),
               ),
@@ -126,7 +129,7 @@ class _AddMedicineScreenState extends State<AddMedicineScreen> {
             const Text(
               '📅 반복 요일',
               style: TextStyle(
-                fontSize: 18,
+                fontSize: 22,
                 fontWeight: FontWeight.bold,
               ),
             ),
@@ -138,10 +141,12 @@ class _AddMedicineScreenState extends State<AddMedicineScreen> {
                   label: Text(
                     days[index],
                     style: TextStyle(
+                      fontSize:20,
                       color: _selectedDays[index] ? Colors.white : Colors.grey,
                       fontWeight: FontWeight.bold,
                     ),
                   ),
+                  padding: const EdgeInsets.symmetric(vertical: 20, horizontal: 12),
                   selected: _selectedDays[index],
                   selectedColor: Colors.green,
                   backgroundColor: Colors.white,
@@ -170,7 +175,7 @@ class _AddMedicineScreenState extends State<AddMedicineScreen> {
                 child: const Text(
                   '약 등록하기',
                   style: TextStyle(
-                    fontSize: 18,
+                    fontSize: 24,
                     fontWeight: FontWeight.bold,
                   ),
                 ),
@@ -185,7 +190,7 @@ class _AddMedicineScreenState extends State<AddMedicineScreen> {
   void _saveMedicine() {
     if (_nameController.text.isEmpty) {
       ScaffoldMessenger.of(context).showSnackBar(
-        const SnackBar(content: Text('약 이름을 입력해주세요')),
+        const SnackBar(content: Text('약 이름을 입력해주세요', style: TextStyle(fontSize: 20))),
       );
       return;
     }
@@ -202,7 +207,7 @@ class _AddMedicineScreenState extends State<AddMedicineScreen> {
 
     ScaffoldMessenger.of(context).showSnackBar(
       SnackBar(
-        content: Text('${_nameController.text} 등록 완료!'),
+        content: Text('${_nameController.text} 등록 완료!',style:const TextStyle(fontsize:20)),
         backgroundColor: Colors.green,
       ),
     );

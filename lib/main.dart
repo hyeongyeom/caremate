@@ -166,7 +166,7 @@ class _PlantCareAppState extends State<PlantCareApp> {
         selectedItemColor: Colors.green,
         iconSize: 36,
         selectedFontSize: 20,
-        unselectedFontSize: 18,
+        unselectedFontSize: 20,
         type: BottomNavigationBarType.fixed,
         items: const [
           BottomNavigationBarItem(
@@ -262,7 +262,9 @@ class _HomeScreenState extends State<HomeScreen> {
                     borderRadius: BorderRadius.circular(10),
                   ),
                   const SizedBox(height: 10),
-                  Text('다음 레벨까지 ${10 - (totalMedicine % 10)}번 남았어요!'),
+                  Text('다음 레벨까지 ${10 - (totalMedicine % 10)}번 남았어요!'
+                  ,style: const TextStyle(fontSize:20),
+                  ),
                 ],
               ),
             ),
@@ -529,7 +531,7 @@ class _HomeScreenState extends State<HomeScreen> {
 
                         return FilterChip(
                           label: Text(med.name, style: const TextStyle(fontSize: 22)),
-                          labelPadding: const EdgeInsets.symmetric(horizontal: 16, vertical: 16),
+                          labelPadding: const EdgeInsets.symmetric(horizontal: 16, vertical: 20),
                           selected: isSelected,
                           selectedColor: Colors.green.shade200,
                           checkmarkColor: Colors.green.shade900,
@@ -1066,7 +1068,9 @@ class _HistoryScreenState extends State<HistoryScreen> {
                     children: [
                       Text(name, style: const TextStyle(fontWeight: FontWeight.bold, fontSize: 24)),
                       const SizedBox(height:6),
-                      Text('${date.year}년 ${date.month}월 ${date.day}일 ${date.hour}:${date.minute.toString().padLeft(2, '0')}'),
+                      Text('${date.year}년 ${date.month}월 ${date.day}일 ${date.hour}:${date.minute.toString().padLeft(2, '0')}', 
+                      style: const TextStyle(fontSize:20),
+                      ),
                     ],
                   ),
                 ),
